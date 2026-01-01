@@ -1,8 +1,25 @@
-obj-m += ldd1_rw.o
+MYPROC=ldd1_rw
+obj-m += $(MYPROC).o
 
-all:
-	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) modules
+export KROOT=/lib/modules/$(shell uname -r)/build
 
-clean:
-	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) clean
+all: modules
 
+modules: clean
+	make -C $(KROOT) M=$(PWD) modules
+
+modules_install:
+	make -C $(KROOT) M=$(PWD) modules_install
+
+kernel_clean:
+	make -C $(KROOT) M=$(PWD) clean
+
+clean: kernel_clean
+	rm -rf Module.symvers modules.order
+
+insert: modules
+	sudo dmesg -C
+	sudo insmod $(MYPROC).ko
+
+remove: clean
+	sudo rmmod $(MYPROC)
