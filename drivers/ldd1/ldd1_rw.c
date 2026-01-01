@@ -10,6 +10,7 @@ MODULE_DESCRIPTION("Basic write & read loadable kernel module");
 static struct proc_dir_entry *this_proc_node;
 
 static char ldd_msg_buff[MAX_BUFF_LEN];
+//static unsigned_8 ldd_math_buff[3];
 static size_t buff_len = 0;
 
 static ssize_t ldd_proc_write(struct file *file_ptr,
